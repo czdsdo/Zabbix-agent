@@ -1,14 +1,18 @@
 #!/bin/bash
 function getHeight(){
-    RESULT=$(curl -s 127.0.0.1:8080/api/getAll)
-    SUCCESS=$(echo $RESULT | jq ".success" | sed "s/\"//g")
-    if [ $SUCCESS == "true" ]
+    RESULT=$(curl -X GET -i 'http://119.27.168.192:9999/getheight')
+    SUCCESS=$(echo $RESULT | jq ".Message" | sed "s/\"//g")
+    if [ $SUCCESS == "success" ]
     then
-        HEIGHT=$(echo $RESULT | jq ".height" | sed "s/\"//g")
+        HEIGHT=$(echo $RESULT | jq ".Date" | sed "s/\"//g")
         echo $HEIGHT > /height
-        echo $HEIGHT
     else
-        sleep 6s
+        return
     fi
 }
+
+while [ 1 ]
+do
+sleep 1s
 getHeight
+done
