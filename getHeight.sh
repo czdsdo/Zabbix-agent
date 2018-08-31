@@ -4,7 +4,7 @@ function getHeight(){
     SUCCESS=$(echo $RESULT | jq ".Message" | sed "s/\"//g")
     if [ $SUCCESS == "success" ]
     then
-        HEIGHT=$(echo $RESULT | jq ".Date" | sed "s/\"//g")
+        HEIGHT=$(echo $RESULT | jq ".Data" | sed "s/\"//g")
         echo $HEIGHT > /height
     else
         return
