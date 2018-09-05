@@ -6,6 +6,7 @@ function getHeight(){
     then
         HEIGHT=$(echo $RESULT | jq ".Data" | sed "s/\"//g")
         echo $HEIGHT > /height
+        cat /height
     else
         return
     fi
