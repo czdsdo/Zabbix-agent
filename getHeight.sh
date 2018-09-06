@@ -12,8 +12,5 @@ function getHeight(){
     fi
 }
 
-while [ 1 ]
-do
-sleep 1s
 getHeight
-done
+
