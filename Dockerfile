@@ -112,7 +112,7 @@ RUN echo 0 > /now && \
 
 RUN curl -sSL https://get.daocloud.io/docker | sh
 
-EXPOSE 10050/TCP
+EXPOSE 9000/TCP
 
 WORKDIR /var/lib/zabbix
 
