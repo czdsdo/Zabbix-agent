@@ -93,6 +93,7 @@ RUN echo "Asia/Shanghai" > /etc/timezone && ln -sf /usr/share/zoneinfo/Asia/Shan
 RUN echo 0 > /now && \
     echo -2 > /height && \
     echo 0 > /status && \
+    echo "LoadMedule=zabbix_module_docker.so" >> /etc/zabbix/zabbix_agentd.conf \
     echo "UserParameter=chain.height,sudo /bin/bash /getHeight.sh" >> /etc/zabbix/zabbix_agentd.d/zabbix_fabric.conf && \
     echo "UserParameter=chain.TaskStatus,sudo /bin/bash /getStatus.sh" >> /etc/zabbix/zabbix_agentd.d/zabbix_fabric.conf && \
     echo "UserParameter=chain.block,sudo /bin/bash /getBlock.sh" >> /etc/zabbix/zabbix_agentd.d/zabbix_fabric.conf && \
@@ -126,6 +127,7 @@ ADD getBlock.sh /
 ADD getNet.sh /
 ADD getLogs.sh /
 ADD getDisk.sh /
+ADD zabbix_module_docker.so /var/lib/zabbix/modules/
 
 ENTRYPOINT ["/bin/bash"]
 
