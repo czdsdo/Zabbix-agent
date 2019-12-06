@@ -1,6 +1,6 @@
 #!/bin/bash
 function getHeight(){
-    RESULT=$(curl -s 'http://119.27.168.192:9999/getheight')
+    RESULT=$(curl -s 'http://127.0.0.1：8080/getheight')
     SUCCESS=$(echo $RESULT | jq ".Message" | sed "s/\"//g")
     if [ $SUCCESS == "success" ]
     then
