@@ -42,7 +42,7 @@ RUN apt-get ${APT_FLAGS_COMMON} update && \
             libssl-dev \
             libpcre3-dev \
             sudo \
-            subversion 1>/dev/null && \
+            ca-certificates 1>/dev/null && \
     cd /tmp/ && \
     git clone ${ZBX_SOURCES} --branch ${ZBX_VERSION} --depth 1 --single-branch zabbix-${ZBX_VERSION} && \
     cd /tmp/zabbix-${ZBX_VERSION} && \
@@ -73,7 +73,7 @@ RUN apt-get ${APT_FLAGS_COMMON} update && \
             pkg-config \
             libssl-dev \
             libpcre3-dev \
-            subversion 1>/dev/null && \
+            ca-certificates 1>/dev/null && \
     apt-get ${APT_FLAGS_COMMON} autoremove && \
     apt-get ${APT_FLAGS_COMMON} clean && \
     rm -rf /var/lib/apt/lists/*
