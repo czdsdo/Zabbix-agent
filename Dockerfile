@@ -26,9 +26,9 @@ RUN addgroup --system --quiet zabbix && \
     apt-get ${APT_FLAGS_COMMON} clean && \
     rm -rf /var/lib/apt/lists/*
 
-ARG MAJOR_VERSION=4.4
-ARG ZBX_VERSION=${MAJOR_VERSION}.3
-ARG ZBX_SOURCES=https://git.zabbix.com/scm/zbx/zabbix.git
+ARG MAJOR_VERSION=3.4
+ARG ZBX_VERSION=${MAJOR_VERSION}.15
+ARG ZBX_SOURCES=svn://svn.zabbix.com/tags/${ZBX_VERSION}/
 ENV ZBX_VERSION=${ZBX_VERSION} ZBX_SOURCES=${ZBX_SOURCES}
 
 RUN apt-get ${APT_FLAGS_COMMON} update && \
@@ -93,7 +93,6 @@ RUN echo "Asia/Shanghai" > /etc/timezone && ln -sf /usr/share/zoneinfo/Asia/Shan
 RUN echo 0 > /now && \
     echo -2 > /height && \
     echo 0 > /status && \
-    echo "LoadModule=zabbix_module_docker.so" >> /etc/zabbix/zabbix_agentd.conf && \
     echo "UserParameter=chain.height,sudo /bin/bash /getHeight.sh" >> /etc/zabbix/zabbix_agentd.d/zabbix_fabric.conf && \
     echo "UserParameter=chain.TaskStatus,sudo /bin/bash /getStatus.sh" >> /etc/zabbix/zabbix_agentd.d/zabbix_fabric.conf && \
     echo "UserParameter=chain.block,sudo /bin/bash /getBlock.sh" >> /etc/zabbix/zabbix_agentd.d/zabbix_fabric.conf && \
@@ -113,7 +112,7 @@ RUN echo 0 > /now && \
 
 RUN curl -sSL https://get.daocloud.io/docker | sh
 
-EXPOSE 9000/TCP
+EXPOSE 10050/TCP
 
 WORKDIR /var/lib/zabbix
 
@@ -127,7 +126,6 @@ ADD getBlock.sh /
 ADD getNet.sh /
 ADD getLogs.sh /
 ADD getDisk.sh /
-ADD zabbix_module_docker.so /var/lib/zabbix/modules/
 
 ENTRYPOINT ["/bin/bash"]
 
