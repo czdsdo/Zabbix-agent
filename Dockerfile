@@ -21,14 +21,15 @@ RUN addgroup --system --quiet zabbix && \
     apt-get ${APT_FLAGS_PERSISTANT} install \
         supervisor \
         libpcre3 \
+        git\
         libssl1.0.0 1>/dev/null && \
     apt-get ${APT_FLAGS_COMMON} autoremove && \
     apt-get ${APT_FLAGS_COMMON} clean && \
     rm -rf /var/lib/apt/lists/*
 
 ARG MAJOR_VERSION=3.4
-ARG ZBX_VERSION=${MAJOR_VERSION}.15
-ARG ZBX_SOURCES=svn://svn.zabbix.com/tags/${ZBX_VERSION}/
+ARG ZBX_VERSION=${MAJOR_VERSION}.1
+ARG ZBX_SOURCES=https://git.zabbix.com/scm/zbx/zabbix.git
 ENV ZBX_VERSION=${ZBX_VERSION} ZBX_SOURCES=${ZBX_SOURCES}
 
 RUN apt-get ${APT_FLAGS_COMMON} update && \
@@ -41,11 +42,11 @@ RUN apt-get ${APT_FLAGS_COMMON} update && \
             libssl-dev \
             libpcre3-dev \
             sudo \
-            subversion 1>/dev/null && \
+            ca-certificates 1>/dev/null && \
     cd /tmp/ && \
-    svn --quiet export ${ZBX_SOURCES} zabbix-${ZBX_VERSION} && \
+    git clone ${ZBX_SOURCES} --branch ${ZBX_VERSION} --depth 1 --single-branch zabbix-${ZBX_VERSION} && \
     cd /tmp/zabbix-${ZBX_VERSION} && \
-    zabbix_revision=`svn info ${ZBX_SOURCES} |grep "Last Changed Rev"|awk '{print $4;}'` && \
+    zabbix_revision=`git rev-parse --short HEAD` && \
     sed -i "s/{ZABBIX_REVISION}/$zabbix_revision/g" include/version.h && \
     ./bootstrap.sh 1>/dev/null && \
     export CFLAGS="-fPIC -pie -Wl,-z,relro -Wl,-z,now" && \
@@ -72,7 +73,7 @@ RUN apt-get ${APT_FLAGS_COMMON} update && \
             pkg-config \
             libssl-dev \
             libpcre3-dev \
-            subversion 1>/dev/null && \
+            ca-certificates 1>/dev/null && \
     apt-get ${APT_FLAGS_COMMON} autoremove && \
     apt-get ${APT_FLAGS_COMMON} clean && \
     rm -rf /var/lib/apt/lists/*
